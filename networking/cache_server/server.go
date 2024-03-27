@@ -41,24 +41,27 @@ func processCommand(conn net.Conn, commandStr string) {
 		value = parts[3]
 	}
 
+	fmt.Println("Command:",  command);
+	
+
 	switch command {
-	case "SET":
-		lock.Lock()
-		dataStore[key] = value
-		lock.Unlock()
-		fmt.Fprintf(conn, "%s OK\n", id)
-	case "GET":
-		lock.RLock()
-		val, ok := dataStore[key]
-		lock.RUnlock()
-		if !ok {
-			fmt.Fprintf(conn, "%s ERROR NOT FOUND\n", id)
-			return
+		case "SET":
+			lock.Lock()
+			dataStore[key] = value
+			lock.Unlock()
+			fmt.Fprintf(conn, "%s OK\n", id)
+		case "GET":
+			lock.RLock()
+			val, ok := dataStore[key]
+			lock.RUnlock()
+			if !ok {
+				fmt.Fprintf(conn, "%s ERROR NOT FOUND\n", id)
+				return
+			}
+			fmt.Fprintf(conn, "%s OK %s\n", id, val)
+		default:
+			fmt.Fprintf(conn, "%s ERROR UNKNOWN COMMAND\n", id)
 		}
-		fmt.Fprintf(conn, "%s OK %s\n", id, val)
-	default:
-		fmt.Fprintf(conn, "%s ERROR UNKNOWN COMMAND\n", id)
-	}
 }
 
 func main() {
