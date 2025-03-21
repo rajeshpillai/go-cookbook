@@ -26,8 +26,34 @@ import (
 	"go-cookbook/projects/ai-codegen/mcp"
 )
 
+// StringArray is a custom type that can unmarshal either a JSON array of strings
+// or an object (in which case it extracts the keys as a slice of strings).
+type StringArray []string
+
+func (sa *StringArray) UnmarshalJSON(data []byte) error {
+	// Try to unmarshal as a slice of strings.
+	var arr []string
+	if err := json.Unmarshal(data, &arr); err == nil {
+		*sa = arr
+		return nil
+	}
+
+	// If not, try unmarshaling as an object and collect its keys.
+	var obj map[string]interface{}
+	if err := json.Unmarshal(data, &obj); err != nil {
+		return err
+	}
+	var keys []string
+	for k := range obj {
+		keys = append(keys, k)
+	}
+	*sa = keys
+	return nil
+}
+
+// CodeResponse now uses StringArray for FileStructure.
 type CodeResponse struct {
-	FileStructure []string          `json:"fileStructure"`
+	FileStructure StringArray       `json:"fileStructure"`
 	CodeFiles     map[string]string `json:"codeFiles"`
 }
 
