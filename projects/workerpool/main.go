@@ -1,8 +1,8 @@
 // Question 1: Implementing a Worker Pool
-// Implement a worker pool in Go. The pool should receive jobs through a channel,
-// process each job concurrently, and send the results back through another
-// channel. Make sure to gracefully shut down the workers when all jobs have
-// been processed."
+// Implement a worker pool in Go. The pool should receive jobs through
+// a channel, process each job concurrently, and send the results
+// back through another channel. Make sure to gracefully shut down the
+// workers when all jobs have been processed."
 
 package main
 
