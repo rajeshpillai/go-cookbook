@@ -21,6 +21,18 @@ type Cache struct {
 }
 
 func NewCache(ttl time.Duration) *Cache {
+	// &Cache{...}:
+	// The & operator returns the memory address of the struct literal being defined. This means you're creating a new Cache struct and then taking its pointer.
+
+	// items: make(map[string]cacheItem)
+	// This initializes the items field with a new empty map. The map is of type map[string]cacheItem, meaning it will hold key-value pairs where keys are strings and values are of type cacheItem.
+
+	// ttl: ttl
+	// This sets the ttl field of the struct to the value of the variable ttl that's passed into the context.
+
+	// Result:
+	// The variable c is of type *Cache (a pointer to a Cache struct). Using a pointer allows you to modify the struct's fields across different parts of your program without copying the entire struct.
+
 	c := &Cache{
 		items: make(map[string]cacheItem),
 		ttl:   ttl,
